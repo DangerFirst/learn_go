@@ -43,6 +43,7 @@ func main() {
 		name = append(name, k)
 		score = append(score, v)
 	}
+	//按分数从高到低排序
 	for i := 0; i < len(score)-1; i++ {
 		for j := i + 1; j < len(score); j++ {
 			if score[i] < score[j] {
@@ -59,7 +60,16 @@ func main() {
 		}
 	}
 	fmt.Println("排名结果如下")
-	for r := 0; r < len(name); r++ {
-		fmt.Println(r+1, name[r], score[r])
+	same := 0
+	//输出排名
+	for r := 0; r < len(name)-1; r++ {
+		//同分数判断
+		if score[r] == score[r+1] {
+			fmt.Printf("%d %s %d ", r+1+same, name[r], score[r])
+			same--
+		} else {
+			fmt.Println(r+1+same, name[r], score[r])
+		}
 	}
+	fmt.Println(len(name)+same, name[len(name)-1], score[len(score)-1])
 }
