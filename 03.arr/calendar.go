@@ -63,7 +63,8 @@ func main() {
 	}
 
 	sit := " "
-	calendarHeader := []string{"一", "二", "三", "四", "五", "六", "日"}
+	//calendarHeader := []string{"一", "二", "三", "四", "五", "六", "日"}
+	calendarHeader := []string{"Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"}
 	//输出该月日期
 	for h := 0; h < 7; h++ {
 		fmt.Printf("%3s ", calendarHeader[h])
@@ -72,9 +73,9 @@ func main() {
 	for w := 0; w < 6; w++ {
 		for d := 0; d < 7; d++ {
 			if calendar[w][d] == 0 {
-				fmt.Printf("%3s  ", sit)
+				fmt.Printf("%3s ", sit)
 			} else {
-				fmt.Printf("%3d  ", calendar[w][d])
+				fmt.Printf("%3d ", calendar[w][d])
 			}
 		}
 		fmt.Println()
