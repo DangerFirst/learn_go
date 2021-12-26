@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestCase1(t *testing.T) {
+func TestCase1Part1(t *testing.T) {
 	inputRecord("王强", 0.38)
 	inputRecord("王强", 0.32)
 	{
@@ -14,14 +14,28 @@ func TestCase1(t *testing.T) {
 			t.Fatalf("预期王强的体脂率为0.32，但是得到的是%f", fatRateOfWQ)
 		}
 	}
+}
+
+func TestCase1(t *testing.T) {
+	inputRecord("王强", 0.38)
+	inputRecord("王强", 0.32)
 	inputRecord("李静", 0.28)
+	{
+		randOfWQ, fatRateOfWQ := getRand("王强")
+		if randOfWQ != 2 {
+			t.Fatalf("预期王强第二，但是得到的是%d", randOfWQ)
+		}
+		if fatRateOfWQ != 0.32 {
+			t.Fatalf("预期王强的体脂率为0.32，但是得到的是%f", fatRateOfWQ)
+		}
+	}
 	{
 		randOfLJ, fatRateOfLJ := getRand("李静")
 		if randOfLJ != 1 {
 			t.Fatalf("预期李静第一，但是得到的是%d", randOfLJ)
 		}
-		if fatRateOfLJ != 0.32 {
-			t.Fatalf("预期李静的体脂率为0.32，但是得到的是%f", fatRateOfLJ)
+		if fatRateOfLJ != 0.28 {
+			t.Fatalf("预期李静的体脂率为0.28，但是得到的是%f", fatRateOfLJ)
 		}
 	}
 }
