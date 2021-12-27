@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	learn_go_tools "learn.go.tools"
 )
 
 func main() {
@@ -25,7 +24,7 @@ func main() {
 			fmt.Println("tall：", tall)
 			fmt.Println("weight：", weight)
 
-			fmt.Println(learn_go_tools.Max(3, 5))
+			//fmt.Println(learn_go_tools.Max(3, 5))
 		},
 	}
 	cmd.Flags().StringVar(&name, "name", "", "姓名")

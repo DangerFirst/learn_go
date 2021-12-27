@@ -5,5 +5,3 @@ func CalcuBmi(weight, tall float64) (bmi float64) {
 	bmi = weight / ((tall * tall) / 10000)
 	return
 }
-
-
