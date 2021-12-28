@@ -1,4 +1,4 @@
-# github.com/armstrongli/go-bmi v0.0.1 => ../learn_go/99.homework/02.fatrate/staging/go-bmi
+# github.com/armstrongli/go-bmi v0.0.1 => ../src/99.homework/02.fatrate/staging/go-bmi
 ## explicit; go 1.16
 github.com/armstrongli/go-bmi
 # github.com/inconshreveable/mousetrap v1.0.0
@@ -10,4 +10,4 @@ github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
 github.com/spf13/pflag
-# github.com/armstrongli/go-bmi => ../learn_go/99.homework/02.fatrate/staging/go-bmi
+# github.com/armstrongli/go-bmi => ../src/99.homework/02.fatrate/staging/go-bmi

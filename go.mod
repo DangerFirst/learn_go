@@ -15,4 +15,4 @@ require (
 
 //replace learn.go.tools => ../learn.go.tools
 
-replace github.com/armstrongli/go-bmi => ../learn_go/99.homework/02.fatrate/staging/go-bmi
+replace github.com/armstrongli/go-bmi => ../src/99.homework/02.fatrate/staging/go-bmi

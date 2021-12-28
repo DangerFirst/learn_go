@@ -7,6 +7,10 @@ func BMI(weightKG, heightM float64) (bmi float64, err error) {
 		err = fmt.Errorf("weight cannot be negative")
 		return
 	}
+	if weightKG == 0 {
+		err = fmt.Errorf("weight cannot be 0")
+		return
+	}
 	if heightM < 0 {
 		err = fmt.Errorf("height cannot be negative")
 		return
