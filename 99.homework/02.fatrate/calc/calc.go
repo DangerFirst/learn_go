@@ -20,6 +20,11 @@ func (Calc) BMI(person *input.Person) error {
 }
 
 func (Calc) FatRate(person *input.Person) error {
-	person.FatRate = gobmi.Fatrate(person.Age, person.Sex, person.Bmi)
+	fatRate, err := gobmi.Fatrate(person.Age, person.Sex, person.Bmi)
+	if err != nil {
+		log.Println("error when calculating fatRate:", err)
+		return err
+	}
+	person.FatRate = fatRate
 	return nil
 }
