@@ -15,4 +15,4 @@ require (
 
 //replace learn.go.tools => ../learn.go.tools
 
-replace github.com/spf13/cobra => github.com/spf13/cobra v1.2.0
+replace github.com/armstrongli/go-bmi => ../learn_go/99.homework/02.fatrate/staging/go-bmi
