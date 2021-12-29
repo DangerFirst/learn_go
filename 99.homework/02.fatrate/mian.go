@@ -1,10 +1,10 @@
 package main
 
 import (
-	"learn.go/99.homework/02.fatrate/calc"
-	"learn.go/99.homework/02.fatrate/continul"
-	"learn.go/99.homework/02.fatrate/input"
-	"learn.go/99.homework/02.fatrate/suggest"
+	"fatrate/calc"
+	"fatrate/continul"
+	"fatrate/input"
+	"fatrate/suggest"
 )
 
 func main() {

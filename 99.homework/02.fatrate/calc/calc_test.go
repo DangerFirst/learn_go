@@ -1,7 +1,7 @@
 package calc
 
 import (
-	"learn.go/99.homework/02.fatrate/input"
+	"fatrate/input"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package calc
 
 import (
+	"fatrate/input"
 	"github.com/armstrongli/go-bmi"
-	"learn.go/99.homework/02.fatrate/input"
 	"log"
 )
 

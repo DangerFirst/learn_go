@@ -1,8 +1,8 @@
 package suggest
 
 import (
+	"fatrate/input"
 	"fmt"
-	"learn.go/99.homework/02.fatrate/input"
 )
 
 func Suggest(person *input.Person) {
