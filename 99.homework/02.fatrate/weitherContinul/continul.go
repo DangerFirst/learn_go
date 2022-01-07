@@ -1,4 +1,4 @@
-package continul
+package weitherContinul
 
 import "fmt"
 

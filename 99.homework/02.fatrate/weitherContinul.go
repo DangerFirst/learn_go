@@ -2,9 +2,9 @@ package main
 
 import (
 	"fatrate/calc"
-	"fatrate/continul"
 	"fatrate/input"
 	"fatrate/suggest"
+	"fatrate/weitherContinul"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 		//获取体脂建议
 		suggest.Suggest(person)
 		//是否继续
-		if continul.WeitherContinul() {
+		if weitherContinul.WeitherContinul() {
 			return
 		}
 	}
