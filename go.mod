@@ -13,6 +13,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 )
 
-//replace learn.go.tools => ../learn.go.tools
+replace github.com/armstrongli/go-bmi => ./99.homework/02.fatrate/staging/go-bmi
 
 

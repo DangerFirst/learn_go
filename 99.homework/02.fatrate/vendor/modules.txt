@@ -1,4 +1,4 @@
 # github.com/armstrongli/go-bmi v0.0.1 => ./staging/go-bmi
-## explicit; go 1.17
+## explicit; go 1.16
 github.com/armstrongli/go-bmi
 # github.com/armstrongli/go-bmi => ./staging/go-bmi

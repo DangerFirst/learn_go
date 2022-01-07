@@ -23,7 +23,7 @@ func Fatrate(age int, sex string, bmi float64) (fatRate float64, err error) {
 		err = fmt.Errorf("bmi cannot be 0")
 		return
 	}
-	if sex != "男" || sex != "女" {
+	if sex != "男" && sex != "女" {
 		err = fmt.Errorf("sex cannot be different from male and female")
 		return
 	}
