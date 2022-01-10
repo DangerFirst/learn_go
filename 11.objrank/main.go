@@ -21,32 +21,45 @@ func (r *FatRateRank) inputRecord(name string, fatRate ...float64) {
 			minFatRate = item
 		}
 	}
+	found := false
 	for i, item := range r.items {
 		if item.Name == name {
 			if item.FatRate > minFatRate {
 				item.FatRate = minFatRate
 			}
 			r.items[i] = item
+			found = true
+			break
 		}
+	}
+	if !found {
+		r.items = append(r.items, RandItem{
+			Name:    name,
+			FatRate: minFatRate,
+		})
 	}
 }
 
 func (r *FatRateRank) getRank(name string) (rank int, fateRate float64) {
-	fateRate2PersonMap := map[float64][]string{}
-	rankArr := make([]float64, 0, len(personFatRate))
-	for nameItem, frItem := range personFatRate {
-		fateRate2PersonMap[frItem] = append(fateRate2PersonMap[frItem], nameItem)
-		rankArr = append(rankArr, frItem)
+	sort.Slice(r.items, func(i, j int) bool {
+		return r.items[i].FatRate < r.items[j].FatRate
+	})
+	frs := map[float64]struct{}{}
+	for _, item := range r.items {
+		frs[item.FatRate] = struct{}{}
+		if item.Name == name {
+			fateRate = item.FatRate
+		}
+	}
+	rankArr := make([]float64, 0, len(frs))
+	for k := range frs {
+		rankArr = append(rankArr, k)
 	}
 	sort.Float64s(rankArr)
 	for i, frItem := range rankArr {
-		_names := fateRate2PersonMap[frItem]
-		for _, _name := range _names {
-			if _name == name {
-				rank = i + 1
-				fateRate = frItem
-				return
-			}
+		if frItem == fateRate {
+			rank = i + 1
+			break
 		}
 	}
 	return
