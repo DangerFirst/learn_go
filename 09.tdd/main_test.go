@@ -3,8 +3,9 @@ package main
 import "testing"
 
 func TestCase1Part1(t *testing.T) {
-	inputRecord("王强", 0.38)
+	//inputRecord("王强", 0.38)
 	inputRecord("王强", 0.32)
+	inputRecord("王强", 0.38)
 	{
 		randOfWQ, fatRateOfWQ := getRank("王强")
 		if randOfWQ != 1 {
@@ -49,8 +50,8 @@ func TestCase2(t *testing.T) {
 		if randOfWQ != 2 {
 			t.Fatalf("预期王强第二，但是得到的是%d", randOfWQ)
 		}
-		if fatRateOfWQ != 0.38 {
-			t.Fatalf("预期王强的体脂率为0.38，但是得到的是%f", fatRateOfWQ)
+		if fatRateOfWQ != 0.32 {
+			t.Fatalf("预期王强的体脂率为0.32，但是得到的是%f", fatRateOfWQ)
 		}
 	}
 	{

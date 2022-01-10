@@ -16,8 +16,9 @@ func inputRecord(name string, fatRate ...float64) {
 			minFatRate = item
 		}
 	}
-
-	personFatRate[name] = minFatRate
+	if personFatRate[name] == 0 || personFatRate[name] > minFatRate {
+		personFatRate[name] = minFatRate
+	}
 }
 
 func getRank(name string) (rank int, fateRate float64) {
