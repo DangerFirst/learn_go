@@ -9,6 +9,8 @@ import (
 type Elevator struct {
 	floor        int
 	currentFloor int
+	direction    int
+	ElevartorDoor
 	ElevatorTask
 }
 
@@ -19,6 +21,10 @@ type ElevatorTask struct {
 
 func (e *Elevator) InputToFloor(floor ...int) {
 	task := &e.ElevatorTask
+	e.direction = 0
+	if floor != nil && floor[0] > e.currentFloor {
+		e.direction = 1
+	}
 	for _, item := range floor {
 		if item > e.currentFloor {
 			task.upTask = append(task.upTask, item)
@@ -35,15 +41,16 @@ func (e *Elevator) InputToFloor(floor ...int) {
 }
 
 func (e *Elevator) ToFloor() {
-	task := []int{}
-	if len(e.ElevatorTask.upTask) >= len(e.ElevatorTask.downTask) {
+	var task []int
+	task = append(e.ElevatorTask.downTask, e.ElevatorTask.upTask...)
+	if e.direction == 1 {
 		task = append(e.ElevatorTask.upTask, e.ElevatorTask.downTask...)
-	} else {
-		task = append(e.ElevatorTask.downTask, e.ElevatorTask.upTask...)
 	}
 	for _, item := range task {
 		time.Sleep(time.Second)
 		fmt.Printf("电梯到达第%d层\n", item)
 		e.currentFloor = item
+		fmt.Print("暂停...")
+		e.ElevartorDoor.Switch()
 	}
 }

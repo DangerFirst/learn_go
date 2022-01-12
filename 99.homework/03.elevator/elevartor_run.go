@@ -8,7 +8,7 @@ func main() {
 		currentFloor: 3,
 	}
 	fmt.Println("电梯当前楼层为：", elevator.currentFloor)
-	elevator.InputToFloor(4, 1, 2, 5)
+	elevator.InputToFloor(5, 1, 3, 4)
 	elevator.ToFloor()
-	fmt.Printf("电梯停在：%d层\n", elevator.currentFloor)
+	fmt.Printf("电梯停在第%d层\n", elevator.currentFloor)
 }
