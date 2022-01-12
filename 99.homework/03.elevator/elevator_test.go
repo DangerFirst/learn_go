@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestCase1(t *testing.T) {
+func TestElevator1(t *testing.T) {
 	e := &Elevator{
 		floor:        5,
 		currentFloor: 1,
@@ -14,7 +14,7 @@ func TestCase1(t *testing.T) {
 	}
 }
 
-func TestCase2(t *testing.T) {
+func TestElevator2(t *testing.T) {
 	e := &Elevator{
 		floor:        5,
 		currentFloor: 1,
@@ -26,7 +26,7 @@ func TestCase2(t *testing.T) {
 	}
 }
 
-func TestCase3(t *testing.T) {
+func TestElevator3(t *testing.T) {
 	e := &Elevator{
 		floor:        5,
 		currentFloor: 3,
