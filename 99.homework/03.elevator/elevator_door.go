@@ -2,10 +2,10 @@ package main
 
 import "fmt"
 
-type ElevartorDoor struct {
+type ElevatorDoor struct {
 }
 
-func (d *ElevartorDoor) Switch() {
+func (d *ElevatorDoor) Switch() {
 	fmt.Print("开门...")
 	fmt.Println("关门...")
 }

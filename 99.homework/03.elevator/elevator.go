@@ -10,7 +10,7 @@ type Elevator struct {
 	floor        int
 	currentFloor int
 	direction    int
-	ElevartorDoor
+	ElevatorDoor
 	ElevatorTask
 }
 
@@ -51,6 +51,6 @@ func (e *Elevator) ToFloor() {
 		fmt.Printf("电梯到达第%d层\n", item)
 		e.currentFloor = item
 		fmt.Print("暂停...")
-		e.ElevartorDoor.Switch()
+		e.ElevatorDoor.Switch()
 	}
 }
