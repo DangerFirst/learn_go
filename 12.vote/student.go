@@ -1,5 +1,19 @@
 package main
 
+import "fmt"
+
+func main() {
+	vg := &voteGame{
+		students: []*student{
+			&student{name: "1"},
+			&student{name: "2"},
+			&student{name: "3"},
+			&student{name: "4"},
+		}}
+	leader := vg.goRun()
+	fmt.Println(leader)
+}
+
 type voteGame struct {
 	students []*student
 }
@@ -25,13 +39,14 @@ func (g *voteGame) goRun() *Leader {
 }
 
 type student struct {
+	name            string
 	agree, disagree int
 }
 
 func (std *student) voteA(target *student) {
-	std.agree++
+	target.agree++
 }
 
 func (std *student) voteD(target *student) {
-	std.disagree++
+	target.disagree++
 }
