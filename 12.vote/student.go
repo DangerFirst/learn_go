@@ -12,13 +12,24 @@ func main() {
 		}}
 	leader := vg.goRun()
 	fmt.Println(leader)
+	leader.Distribute()
+
+	var stdXS = &student{
+		name: "小宋",
+	}
+	var ldXS Leader = Leader(*stdXS)
+	fmt.Println(ldXS)
 }
 
 type voteGame struct {
 	students []*student
 }
 
-type Leader = student
+type Leader student
+
+func (l *Leader) Distribute() {
+	fmt.Println("发作业了。。。。")
+}
 
 func (g *voteGame) goRun() *Leader {
 	for _, item := range g.students {
@@ -35,7 +46,7 @@ func (g *voteGame) goRun() *Leader {
 	if maxScore < 0 {
 		return nil
 	}
-	return g.students[maxScoreIndex]
+	return (*Leader)(g.students[maxScoreIndex])
 }
 
 type student struct {
