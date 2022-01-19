@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -79,4 +80,20 @@ func isPrime(num int) (isPrime bool) {
 		}
 	}
 	return true
+}
+
+func TestForeverGoroutine(t *testing.T) {
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			go func() {
+				fmt.Println("启动一个新的goroutine@", time.Now())
+				time.Sleep(time.Hour)
+			}()
+		}
+	}()
+	for {
+		fmt.Println(runtime.NumGoroutine())
+		time.Sleep(time.Second * 2)
+	}
 }
