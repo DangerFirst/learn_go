@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"learn.go/05.fatrate_restructure/calc"
-	"learn.go/05.fatrate_restructure/store"
-	"learn.go/05.fatrate_restructure/suggest"
-	"learn.go/05.fatrate_restructure/weithercontinul"
+	"learn.go/chapter02/01.fatrate_restructure/calc"
+	"learn.go/chapter02/01.fatrate_restructure/store"
+	"learn.go/chapter02/01.fatrate_restructure/suggest"
+	"learn.go/chapter02/01.fatrate_restructure/weithercontinul"
 )
 
 func main() {
