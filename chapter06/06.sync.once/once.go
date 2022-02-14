@@ -7,21 +7,26 @@ type rank struct {
 }
 
 var globalRank = &rank{}
-var initGlobalRankStandardInit bool = false
-var initGlobalRankStandardLock sync.Mutex
 
-func init() {
-	globalRank.standard = []string{"Asia"}
-}
+//var initGlobalRankStandardInit bool = false
+//var initGlobalRankStandardLock sync.Mutex
+var once sync.Once
+
+//func init() {
+//	globalRank.standard = []string{"Asia"}
+//}
 
 func initGlobalRankStandard(standard []string) {
-	initGlobalRankStandardLock.Lock()
-	defer initGlobalRankStandardLock.Unlock()
-	if initGlobalRankStandardInit {
-		return
-	}
-	initGlobalRankStandardInit = true
-	globalRank.standard = standard
+	once.Do(func() {
+		globalRank.standard = standard
+	})
+	//initGlobalRankStandardLock.Lock()
+	//defer initGlobalRankStandardLock.Unlock()
+	//if initGlobalRankStandardInit {
+	//	return
+	//}
+	//initGlobalRankStandardInit = true
+
 }
 
 func main() {
