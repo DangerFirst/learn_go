@@ -12,7 +12,7 @@ import (
 
 func main() {
 	r := &FatRateRank{}
-	num := 10
+	num := 1000
 	//录入基本数据
 	for i := 0; i < num; i++ {
 		rand.Seed(time.Now().UnixNano())
@@ -30,6 +30,7 @@ func main() {
 			for _, item := range r.items {
 				go func(f *RandItem) {
 					f.Lock.RLock()
+					defer wg.Done()
 					defer f.Lock.RUnlock()
 					rank, fatRate := r.getRank(f.Name)
 					fmt.Printf("%s的现体脂率为%.2f,排名为%d\n", f.Name, fatRate, rank)
@@ -68,7 +69,7 @@ func main() {
 			wg.Wait()
 		}
 	}()
-	time.Sleep(5 * time.Second)
+	time.Sleep(1 * time.Minute)
 }
 
 type RandItem struct {
@@ -79,7 +80,6 @@ type RandItem struct {
 
 type FatRateRank struct {
 	items []*RandItem
-	Lock  sync.RWMutex
 }
 
 func (r *FatRateRank) inputRecord(name string, fatRate ...float64) {
