@@ -11,6 +11,27 @@ import (
 )
 
 func main() {
+	input := &inputFromStd{}
+	calc := &Calc{}
+	rk := &FatRateRank{}
+	records := NewRecord("E:/go语言/go/go_file/records.txt")
+	for {
+		pi := input.GetInput()
+		if err := records.savePersonalInformation(pi); err != nil {
+			log.Fatal("保持失败：", err)
+		}
+		fr, err := calc.FatRate(pi)
+		if err != nil {
+			log.Fatal("计算体脂率失败：", err)
+		}
+		rk.inputRecord(pi.Name, fr)
+
+		rankResult, _ := rk.getRank(pi.Name)
+		fmt.Println("排名结果：", rankResult)
+	}
+}
+
+func caseStudy() {
 	filePath := "E:/go语言/go/go_file/荣霸天.self.information.json"
 
 	personalInformation := apis.PersonalInformation{
