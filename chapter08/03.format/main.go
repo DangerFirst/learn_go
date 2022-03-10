@@ -18,7 +18,7 @@ func main() {
 	for {
 		pi := input.GetInput()
 		if err := records.savePersonalInformation(pi); err != nil {
-			log.Fatal("保持失败：", err)
+			log.Fatal("保存失败：", err)
 		}
 		fr, err := calc.FatRate(pi)
 		if err != nil {
