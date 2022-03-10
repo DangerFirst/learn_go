@@ -37,7 +37,7 @@ func TestUnmarshalJson(t *testing.T) {
 
 func TestMarshalYaml(t *testing.T) {
 	personalInformation := PersonalInformation{
-		name:   `"小"黑"`,
+		Name:   `"小"黑"`,
 		Sex:    "男",
 		Age:    19,
 		Tall:   1.77,
@@ -55,7 +55,7 @@ func TestMarshalYaml(t *testing.T) {
 
 }
 
-func TestUnmarshalJsonYaml(t *testing.T) {
+func TestUnmarshalYaml(t *testing.T) {
 	data := `{"name":"\"小\"黑\"","sex":"男","age":19,"tall":1.77,"weight":65}`
 	personalInformation := PersonalInformation{}
 	json.Unmarshal([]byte(data), &personalInformation)
