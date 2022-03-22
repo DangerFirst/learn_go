@@ -9,6 +9,12 @@ github.com/go-sql-driver/mysql
 # github.com/inconshreveable/mousetrap v1.0.0
 ## explicit
 github.com/inconshreveable/mousetrap
+# github.com/jinzhu/inflection v1.0.0
+## explicit
+github.com/jinzhu/inflection
+# github.com/jinzhu/now v1.1.4
+## explicit; go 1.12
+github.com/jinzhu/now
 # github.com/spf13/cobra v1.3.0
 ## explicit; go 1.15
 github.com/spf13/cobra
@@ -45,4 +51,16 @@ google.golang.org/protobuf/runtime/protoimpl
 # gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 ## explicit
 gopkg.in/yaml.v3
+# gorm.io/driver/mysql v1.3.2
+## explicit; go 1.14
+gorm.io/driver/mysql
+# gorm.io/gorm v1.23.3
+## explicit; go 1.14
+gorm.io/gorm
+gorm.io/gorm/callbacks
+gorm.io/gorm/clause
+gorm.io/gorm/logger
+gorm.io/gorm/migrator
+gorm.io/gorm/schema
+gorm.io/gorm/utils
 # github.com/armstrongli/go-bmi => ./homework/02.fatrate/staging/go-bmi
