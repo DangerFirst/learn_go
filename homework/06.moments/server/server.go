@@ -34,6 +34,12 @@ func main() {
 	r := gin.Default()
 	pprof.Register(r)
 	//发朋友圈
+	//json格式为
+	//{
+	//	"PersonalName":    "小正",
+	//	"ShowDescription": "发布内容"
+	//}
+	//personal_information里需要有该姓名的数据才行，没有的需要注册register一下
 	r.POST("/publish", func(c *gin.Context) {
 		var ps *apis.PersonalShow
 		if err := c.BindJSON(&ps); err != nil {
@@ -53,22 +59,26 @@ func main() {
 		})
 	})
 	//删朋友圈
+	//json格式为
+	//{
+	//	"PersonalName": "小绿"
+	//}
 	r.PUT("/delete", func(c *gin.Context) {
 		var ps *apis.PersonalShow
 		if err := c.BindJSON(&ps); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errorMessage": "无法更新信息" + err.Error(),
+				"errorMessage": "无法删除信息" + err.Error(),
 			})
 			return
 		}
 		if err := momentsServer.Delete(ps); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errorMessage": "更新失败" + err.Error(),
+				"errorMessage": "删除失败" + err.Error(),
 			})
 			return
 		} else {
 			c.JSON(http.StatusOK, gin.H{
-				"message": "success",
+				"message": "删除成功",
 			})
 		}
 	})
@@ -83,7 +93,15 @@ func main() {
 			c.JSON(http.StatusOK, mo)
 		}
 	})
-
+	//注册
+	//json格式
+	//{
+	//	"name": "小正",
+	//	"sex": "男",
+	//	"tall": 1.9,
+	//	"weight": 61,
+	//	"age":32
+	//}
 	r.POST("/register", func(c *gin.Context) {
 		var pi *apis.PersonalInformation
 		if err := c.BindJSON(&pi); err != nil {
@@ -99,7 +117,7 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"message": "删除成功",
+			"message": "注册成功",
 		})
 	})
 
