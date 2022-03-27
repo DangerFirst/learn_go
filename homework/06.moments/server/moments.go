@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	gobmi "github.com/armstrongli/go-bmi"
 	"gorm.io/gorm"
 	"log"
 	"moments/frinterface"
@@ -37,15 +38,22 @@ type dbMoments struct {
 }
 
 func (d dbMoments) Publish(ps *apis.PersonalShow) error {
+	var tables []apis.PersonalInformation
+	d.conn.Where("name=?", ps.PersonalName).Order("id desc").First(&tables)
+	if len(tables) == 0 {
+		log.Fatal("请先注册完善个人信息")
+	}
+	bmi, _ := gobmi.BMI(float64(tables[0].Weight), float64(tables[0].Tall))
+	fr, _ := gobmi.Fatrate(int(tables[0].Age), tables[0].Sex, bmi)
 	ps = &apis.PersonalShow{
-		PersonalId:      ps.PersonalId,
+		PersonalId:      tables[0].Id,
 		PersonalName:    ps.PersonalName,
 		ShowDescription: ps.ShowDescription,
-		ShowTime:        time.Now().UTC().String(),
-		ByTimeAge:       ps.ByTimeAge,
-		ByTimeTall:      ps.ByTimeTall,
-		ByTimeWeight:    ps.ByTimeWeight,
-		ByTimeFatRate:   ps.ByTimeFatRate,
+		ShowTime:        time.Now().Local().String(),
+		ByTimeAge:       tables[0].Age,
+		ByTimeTall:      tables[0].Tall,
+		ByTimeWeight:    tables[0].Weight,
+		ByTimeFatRate:   float32(fr),
 		IsDeleted:       0,
 	}
 
