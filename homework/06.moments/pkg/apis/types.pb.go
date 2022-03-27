@@ -378,8 +378,8 @@ type PersonalShow struct {
 
 	// @gotags: gorm:"primaryKey;column:id"
 	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:id"`
-	// @gotags: gorm:"primaryKey;column:personal_id"
-	PersonalId int64 `protobuf:"varint,2,opt,name=personalId,proto3" json:"personalId,omitempty" gorm:"primaryKey;column:personal_id"`
+	// @gotags: gorm:"column:personal_id"
+	PersonalId int64 `protobuf:"varint,2,opt,name=personalId,proto3" json:"personalId,omitempty" gorm:"column:personal_id"`
 	// @gotags: gorm:"column:personal_name"
 	PersonalName string `protobuf:"bytes,3,opt,name=personalName,proto3" json:"personalName,omitempty" gorm:"column:personal_name"`
 	// @gotags: gorm:"column:show_description"

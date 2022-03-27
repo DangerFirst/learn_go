@@ -52,7 +52,7 @@ message PersonalInformation {
 message PersonalShow{
   // @gotags: gorm:"primaryKey;column:id"
   int64 id = 1;
-  // @gotags: gorm:"primaryKey;column:personal_id"
+  // @gotags: gorm:"column:personal_id"
   int64 personalId = 2;
   // @gotags: gorm:"column:personal_name"
   string personalName = 3;
