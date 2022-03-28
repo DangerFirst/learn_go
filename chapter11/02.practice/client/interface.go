@@ -26,6 +26,7 @@ func (f fakeInterface) ReadPersonalInformation() (apis.PersonalInformation, erro
 	if r.Int64()%2 == 0 {
 		out = 0 - out
 	}
+	f.baseWeight += out
 	pi := apis.PersonalInformation{
 		Name:   f.name,
 		Sex:    f.sex,
@@ -33,6 +34,5 @@ func (f fakeInterface) ReadPersonalInformation() (apis.PersonalInformation, erro
 		Weight: float32(f.baseWeight),
 		Age:    int64(f.baseAge),
 	}
-	f.baseWeight += out
 	return pi, nil
 }
