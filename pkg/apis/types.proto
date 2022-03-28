@@ -3,9 +3,9 @@ package apis;
 option go_package ="./";
 
 message PersonalInformationList{
-  repeated PersonalInformationP items=1;
+  repeated PersonalInformation items=1;
 }
-message PersonalInformationP{
+message PersonalInformation{
   string name=1;
   string sex=2;
   float tall=3;
