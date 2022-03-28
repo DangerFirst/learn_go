@@ -1,20 +1,25 @@
 package main
 
 import (
-	"encoding/base64"
-	"io/ioutil"
+	"fmt"
 	"net/http"
 )
 
 func main() {
-	http.ListenAndServe(":8088", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		if request.Body == nil {
-			writer.Write([]byte("no body"))
-			return
-		}
-		data, _ := ioutil.ReadAll(request.Body)
-		defer request.Body.Close()
-		encoded := base64.StdEncoding.EncodeToString(data)
-		writer.Write(append(data, []byte(encoded)...))
+	m := http.NewServeMux()
+	m.Handle("/hello", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte(`hello`))
 	}))
+	m.Handle("/rank", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte(`rank`))
+	}))
+	m.Handle("/history/xiaohei", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		writer.Write([]byte(`xiaohei`))
+	}))
+	m.Handle("/history", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		qp := request.URL.Query()
+		name := qp.Get("name")
+		writer.Write([]byte(fmt.Sprintf(`%s: %s的历史`, request.Method, name)))
+	}))
+	http.ListenAndServe(":8080", m)
 }
