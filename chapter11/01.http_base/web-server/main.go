@@ -19,6 +19,7 @@ func main() {
 	m.Handle("/history", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		qp := request.URL.Query()
 		name := qp.Get("name")
+		writer.WriteHeader(http.StatusOK)
 		writer.Write([]byte(fmt.Sprintf(`%s: %s的历史`, request.Method, name)))
 	}))
 	http.ListenAndServe(":8080", m)
