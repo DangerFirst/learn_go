@@ -6,10 +6,17 @@ message PersonalInformationList{
   repeated PersonalInformation items=1;
 }
 message PersonalInformation{
-  string name=1;
-  string sex=2;
-  float tall=3;
-  float weight=4;
-  int64 age=5;
+  // @gotags: gorm:"primaryKey;column:id"
+  int64 id = 1;
+  // @gotags: gorm:"column:name"
+  string name = 2;
+  // @gotags: gorm:"column:sex"
+  string sex = 3;
+  // @gotags: gorm:"column:tall"
+  float  tall = 4;
+  // @gotags: gorm:"column:weight"
+  float weight = 5;
+  // @gotags: gorm:"column:age"
+  int64 age = 6;
 }
 

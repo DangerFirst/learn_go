@@ -23,3 +23,7 @@ type PersonalRank struct {
 	RankNum int
 	FatRate float64
 }
+
+func (*PersonalInformation) TableName() string {
+	return "personal_information"
+}

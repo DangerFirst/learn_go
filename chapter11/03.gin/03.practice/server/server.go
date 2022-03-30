@@ -1,16 +1,35 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"learn.go/chapter11/02.practice/frinterface"
 	"learn.go/pkg/apis"
 	"log"
 	"net/http"
 )
 
+func connectDb() *gorm.DB {
+	conn, err := gorm.Open(mysql.Open("root:123qwe@tcp(localhost)/testdb"))
+	if err != nil {
+		log.Fatal("数据库连接失败：", err)
+	}
+	fmt.Println("连接数据库成功")
+	return conn
+}
+
 func main() {
-	var rankServer frinterface.ServerInterface = NewFatRateRank()
+	conn := connectDb()
+	var rankServer frinterface.ServerInterface = NewDbRank(conn, NewFatRateRank())
+
+	if initRank, ok := rankServer.(frinterface.RankInitInterface); ok {
+		if err := initRank.Init(); err != nil {
+			log.Fatal("初始化失败", err)
+		}
+	}
 
 	r := gin.Default()
 	pprof.Register(r)
