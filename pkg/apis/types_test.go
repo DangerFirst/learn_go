@@ -10,7 +10,7 @@ import (
 
 func TestMarshalJson(t *testing.T) {
 	personalInformation := PersonalInformation{
-		name:   `"小"黑"`,
+		Name:   `"小"黑"`,
 		Sex:    "男",
 		Age:    19,
 		Tall:   1.77,
