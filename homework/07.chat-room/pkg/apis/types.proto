@@ -1,0 +1,61 @@
+syntax = "proto3";
+package apis;
+option go_package = ".;apis";
+
+service ChatService{
+  rpc Register(Account) returns (Account){}
+  rpc Login(Account) returns(null){}
+  rpc OnlineUser(null) returns(OnlineUserList){}
+  rpc Chat(Account) returns(ChatHistory){}
+  rpc ChatRecord(Account) returns(ChatHistory){}
+  rpc RevMessage(Account) returns(Message){}
+}
+
+message null{}
+
+message Message{
+  int64 talkerAccount = 1;
+  string talker = 2;
+  int64 listenerAccount =3;
+  string listener = 4;
+  string  record = 5;
+  string  createDate = 6;
+}
+
+message OnlineUserList{
+  repeated Account onlineUsers = 1;
+}
+
+message OnlineUser{
+  int64 account = 2;
+  string name = 3;
+}
+
+message ChatHistory{
+  // @gotags: gorm:"primaryKey;column:id"
+  int64 id = 1;
+  // @gotags: gorm:"column:talker_account"
+  int64 talkerAccount = 2;
+  // @gotags: gorm:"column:talker"
+  string talker = 3;
+  // @gotags: gorm:"column:listener_account"
+  int64 listenerAccount = 4;
+  // @gotags: gorm:"column:listener"
+  string listener = 5;
+  // @gotags: gorm:"column:record"
+  string  record = 6;
+  // @gotags: gorm:"column:create_date"
+  string  createDate = 7;
+}
+
+message Account{
+  // @gotags: gorm:"primaryKey;column:id"
+  int64 id = 1;
+  // @gotags: gorm:"primaryKey;column:account"
+  int64 account = 2;
+  // @gotags: gorm:"column:password"
+  string password = 3;
+  // @gotags: gorm:"column:name"
+  string name = 4;
+}
+
