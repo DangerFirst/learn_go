@@ -12,17 +12,17 @@ package apis
 //	unknownFields interface{}
 //}
 
-type PersonalInformationFatRate struct {
-	Name    string
-	FatRate float64
-}
-
-type PersonalRank struct {
-	Name    string
-	Sex     string
-	RankNum int
-	FatRate float64
-}
+//type PersonalInformationFatRate struct {
+//	Name    string
+//	FatRate float64
+//}
+//
+//type PersonalRank struct {
+//	Name    string
+//	Sex     string
+//	RankNum int
+//	FatRate float64
+//}
 
 func (*PersonalInformation) TableName() string {
 	return "personal_information"

@@ -10,19 +10,34 @@ import (
 )
 
 var _ apis.RankServiceServer = &rankServer{}
-var _ frinterface.ServerInterface = &rankServer{}
 
 type rankServer struct {
 	sync.Mutex
 	apis.UnimplementedRankServiceServer
-	persons  map[string]*apis.PersonalInformation
+	rankS    frinterface.ServerInterface
 	personCh chan *apis.PersonalInformation
 }
 
+func (r rankServer) Update(ctx context.Context, information *apis.PersonalInformation) (*apis.PersonalInformationFatRate, error) {
+	r.regPerson(information)
+	return r.rankS.UpdatePersonalInformation(information)
+}
+
+func (r rankServer) GetFR(ctx context.Context, information *apis.PersonalInformation) (*apis.PersonalRank, error) {
+	return r.rankS.GetFatRate(information.Name)
+}
+
+func (r rankServer) GetTop(ctx context.Context, null *apis.Null) (*apis.PersonalRanks, error) {
+	top, err := r.rankS.GetTop()
+	if err != nil {
+		log.Println("获取榜单出错：", err)
+		return nil, err
+	}
+	return &apis.PersonalRanks{PersonalRanks: top}, nil
+}
+
 func (r rankServer) regPerson(pi *apis.PersonalInformation) {
-	r.Lock()
-	defer r.Unlock()
-	r.persons[pi.Name] = pi
+	r.rankS.RegisterPersonalInformation(pi) //todo handle error
 	r.personCh <- pi
 }
 
