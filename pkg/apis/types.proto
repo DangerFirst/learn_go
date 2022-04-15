@@ -4,6 +4,7 @@ option go_package =".;apis";
 
 service RankService{
   rpc Register(PersonalInformation) returns (PersonalInformation){}
+  rpc RegisterPersons(stream PersonalInformation) returns (PersonalInformationList){}
 }
 
 message PersonalInformationList{
