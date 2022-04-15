@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RankServiceClient interface {
 	Register(ctx context.Context, in *PersonalInformation, opts ...grpc.CallOption) (*PersonalInformation, error)
 	RegisterPersons(ctx context.Context, opts ...grpc.CallOption) (RankService_RegisterPersonsClient, error)
+	WatchPersons(ctx context.Context, in *Null, opts ...grpc.CallOption) (RankService_WatchPersonsClient, error)
 }
 
 type rankServiceClient struct {
@@ -73,12 +74,45 @@ func (x *rankServiceRegisterPersonsClient) CloseAndRecv() (*PersonalInformationL
 	return m, nil
 }
 
+func (c *rankServiceClient) WatchPersons(ctx context.Context, in *Null, opts ...grpc.CallOption) (RankService_WatchPersonsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &RankService_ServiceDesc.Streams[1], "/apis.RankService/WatchPersons", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &rankServiceWatchPersonsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RankService_WatchPersonsClient interface {
+	Recv() (*PersonalInformation, error)
+	grpc.ClientStream
+}
+
+type rankServiceWatchPersonsClient struct {
+	grpc.ClientStream
+}
+
+func (x *rankServiceWatchPersonsClient) Recv() (*PersonalInformation, error) {
+	m := new(PersonalInformation)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // RankServiceServer is the server API for RankService service.
 // All implementations must embed UnimplementedRankServiceServer
 // for forward compatibility
 type RankServiceServer interface {
 	Register(context.Context, *PersonalInformation) (*PersonalInformation, error)
 	RegisterPersons(RankService_RegisterPersonsServer) error
+	WatchPersons(*Null, RankService_WatchPersonsServer) error
 	mustEmbedUnimplementedRankServiceServer()
 }
 
@@ -91,6 +125,9 @@ func (UnimplementedRankServiceServer) Register(context.Context, *PersonalInforma
 }
 func (UnimplementedRankServiceServer) RegisterPersons(RankService_RegisterPersonsServer) error {
 	return status.Errorf(codes.Unimplemented, "method RegisterPersons not implemented")
+}
+func (UnimplementedRankServiceServer) WatchPersons(*Null, RankService_WatchPersonsServer) error {
+	return status.Errorf(codes.Unimplemented, "method WatchPersons not implemented")
 }
 func (UnimplementedRankServiceServer) mustEmbedUnimplementedRankServiceServer() {}
 
@@ -149,6 +186,27 @@ func (x *rankServiceRegisterPersonsServer) Recv() (*PersonalInformation, error) 
 	return m, nil
 }
 
+func _RankService_WatchPersons_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Null)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(RankServiceServer).WatchPersons(m, &rankServiceWatchPersonsServer{stream})
+}
+
+type RankService_WatchPersonsServer interface {
+	Send(*PersonalInformation) error
+	grpc.ServerStream
+}
+
+type rankServiceWatchPersonsServer struct {
+	grpc.ServerStream
+}
+
+func (x *rankServiceWatchPersonsServer) Send(m *PersonalInformation) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // RankService_ServiceDesc is the grpc.ServiceDesc for RankService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +224,11 @@ var RankService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "RegisterPersons",
 			Handler:       _RankService_RegisterPersons_Handler,
 			ClientStreams: true,
+		},
+		{
+			StreamName:    "WatchPersons",
+			Handler:       _RankService_WatchPersons_Handler,
+			ServerStreams: true,
 		},
 	},
 	Metadata: "types.proto",
