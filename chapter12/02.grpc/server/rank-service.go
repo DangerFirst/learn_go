@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"io"
+	"learn.go/chapter12/02.grpc/server/frinterface"
 	"learn.go/pkg/apis"
 	"log"
 	"sync"
 )
 
 var _ apis.RankServiceServer = &rankServer{}
+var _ frinterface.ServerInterface = &rankServer{}
 
 type rankServer struct {
 	sync.Mutex
