@@ -37,6 +37,8 @@ func main() {
 						onlineUser(c)
 					} else if commandAfterLogin == "chat with" {
 						chatWith(c, act)
+					} else if commandAfterLogin == "chat history" {
+						chatHistory(c, act)
 					} else if commandAfterLogin == "exit 0" {
 						fmt.Println("退出登录成功")
 						logOut(c, act)
@@ -73,6 +75,19 @@ func logOut(c apis.ChatServiceClient, act *apis.Account) {
 	_, err := c.LogOut(context.TODO(), act)
 	if err != nil {
 		log.Fatal("退出失败：", err)
+	}
+}
+
+func chatHistory(c apis.ChatServiceClient, act *apis.Account) {
+	conn := connectDb()
+	var chatServer apis.ChatServiceServer = NewDbChat(conn, &dbChat{})
+	_, err := c.ChatRecord(context.TODO(), act)
+	if err != nil {
+		log.Fatal("查询失败：", err)
+	}
+	_, err = chatServer.ChatRecord(context.TODO(), act)
+	if err != nil {
+		log.Fatal("查询失败：", err)
 	}
 }
 

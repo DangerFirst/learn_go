@@ -66,7 +66,20 @@ func (d dbChat) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHist
 }
 
 func (d dbChat) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
-	panic("implement me")
+	var tables []*apis.ChatHistory
+	resp := d.conn.Where("talker_account=?", account.Account).Find(&tables)
+	if err := resp.Error; err != nil {
+		fmt.Println("查询失败：", err)
+		return nil, err
+	}
+	if len(tables) == 0 {
+		fmt.Println("没有聊天记录")
+		return nil, nil
+	}
+	for _, v := range tables {
+		fmt.Printf("%s|%d:%s->%s|%d %s\n", v.Talker, v.TalkerAccount, v.Record, v.Listener, v.ListenerAccount, v.CreateDate)
+	}
+	return nil, nil
 }
 
 func (d dbChat) RevMessage(ctx context.Context, account *apis.Account) (*apis.Message, error) {

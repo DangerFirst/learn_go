@@ -50,7 +50,9 @@ func (c chatServer) Chat(ctx context.Context, account *apis.Account) (*apis.Chat
 }
 
 func (c chatServer) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
-	return nil, nil
+	log.Printf("查询%s聊天记录\n", account.Name)
+	chy := &apis.ChatHistory{}
+	return chy, nil
 }
 
 func (c chatServer) RevMessage(ctx context.Context, account *apis.Account) (*apis.Message, error) {
