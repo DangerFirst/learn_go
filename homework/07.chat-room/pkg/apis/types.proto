@@ -4,11 +4,13 @@ option go_package = ".;apis";
 
 service ChatService{
   rpc Register(Account) returns (Account){}
-  rpc Login(Account) returns(null){}
+  rpc Login(Account) returns(Account){}
   rpc OnlineUser(null) returns(OnlineUserList){}
   rpc Chat(Account) returns(ChatHistory){}
   rpc ChatRecord(Account) returns(ChatHistory){}
   rpc RevMessage(Account) returns(Message){}
+  rpc LogOut(Account) returns (Account){}
+//  rpc WatchOnline(null) returns(stream OnlineUserList){}
 }
 
 message null{}
@@ -23,7 +25,7 @@ message Message{
 }
 
 message OnlineUserList{
-  repeated Account onlineUsers = 1;
+  repeated OnlineUser onlineUsers = 1;
 }
 
 message OnlineUser{

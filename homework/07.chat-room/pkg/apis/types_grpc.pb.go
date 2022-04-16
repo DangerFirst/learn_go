@@ -19,11 +19,12 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ChatServiceClient interface {
 	Register(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
-	Login(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Null, error)
+	Login(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 	OnlineUser(ctx context.Context, in *Null, opts ...grpc.CallOption) (*OnlineUserList, error)
 	Chat(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error)
 	ChatRecord(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error)
 	RevMessage(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Message, error)
+	LogOut(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 }
 
 type chatServiceClient struct {
@@ -43,8 +44,8 @@ func (c *chatServiceClient) Register(ctx context.Context, in *Account, opts ...g
 	return out, nil
 }
 
-func (c *chatServiceClient) Login(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Null, error) {
-	out := new(Null)
+func (c *chatServiceClient) Login(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error) {
+	out := new(Account)
 	err := c.cc.Invoke(ctx, "/apis.ChatService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,16 +89,26 @@ func (c *chatServiceClient) RevMessage(ctx context.Context, in *Account, opts ..
 	return out, nil
 }
 
+func (c *chatServiceClient) LogOut(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error) {
+	out := new(Account)
+	err := c.cc.Invoke(ctx, "/apis.ChatService/LogOut", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations should embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
 	Register(context.Context, *Account) (*Account, error)
-	Login(context.Context, *Account) (*Null, error)
+	Login(context.Context, *Account) (*Account, error)
 	OnlineUser(context.Context, *Null) (*OnlineUserList, error)
 	Chat(context.Context, *Account) (*ChatHistory, error)
 	ChatRecord(context.Context, *Account) (*ChatHistory, error)
 	RevMessage(context.Context, *Account) (*Message, error)
+	LogOut(context.Context, *Account) (*Account, error)
 }
 
 // UnimplementedChatServiceServer should be embedded to have forward compatible implementations.
@@ -107,7 +118,7 @@ type UnimplementedChatServiceServer struct {
 func (UnimplementedChatServiceServer) Register(context.Context, *Account) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedChatServiceServer) Login(context.Context, *Account) (*Null, error) {
+func (UnimplementedChatServiceServer) Login(context.Context, *Account) (*Account, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedChatServiceServer) OnlineUser(context.Context, *Null) (*OnlineUserList, error) {
@@ -121,6 +132,9 @@ func (UnimplementedChatServiceServer) ChatRecord(context.Context, *Account) (*Ch
 }
 func (UnimplementedChatServiceServer) RevMessage(context.Context, *Account) (*Message, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevMessage not implemented")
+}
+func (UnimplementedChatServiceServer) LogOut(context.Context, *Account) (*Account, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LogOut not implemented")
 }
 
 // UnsafeChatServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -242,6 +256,24 @@ func _ChatService_RevMessage_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatService_LogOut_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Account)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).LogOut(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/apis.ChatService/LogOut",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).LogOut(ctx, req.(*Account))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -272,6 +304,10 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevMessage",
 			Handler:    _ChatService_RevMessage_Handler,
+		},
+		{
+			MethodName: "LogOut",
+			Handler:    _ChatService_LogOut_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
