@@ -2,6 +2,7 @@ package main
 
 import (
 	"chatroom/pkg/apis"
+	"fmt"
 	"golang.org/x/net/context"
 	"log"
 )
@@ -11,7 +12,6 @@ var _ apis.ChatServiceServer = &chatServer{}
 var ol *apis.OnlineUserList = &apis.OnlineUserList{}
 
 type chatServer struct {
-	messageCh chan *apis.Message
 }
 
 func (c chatServer) LogOut(ctx context.Context, account *apis.Account) (*apis.Account, error) {
@@ -45,8 +45,10 @@ func (c chatServer) OnlineUser(ctx context.Context, null *apis.Null) (*apis.Onli
 
 func (c chatServer) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
 	log.Printf("%s开始聊天\n", account.Name)
-	chy := &apis.ChatHistory{}
-	return chy, nil
+	//mg=append(mg, ctx.Value("mg").(*apis.Message))
+	fmt.Println(fmt.Sprintln(ctx.Value("mg")))
+	mx := &apis.ChatHistory{}
+	return mx, nil
 }
 
 func (c chatServer) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
@@ -55,6 +57,8 @@ func (c chatServer) ChatRecord(ctx context.Context, account *apis.Account) (*api
 	return chy, nil
 }
 
-func (c chatServer) RevMessage(ctx context.Context, account *apis.Account) (*apis.Message, error) {
-	return nil, nil
+func (c chatServer) RevMessage(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
+	log.Printf("%s接收消息\n", account.Name)
+	chy := &apis.ChatHistory{}
+	return chy, nil
 }

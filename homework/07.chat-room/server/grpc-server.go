@@ -20,9 +20,7 @@ func startGRPCServer(ctx context.Context) {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer([]grpc.ServerOption{}...)
-	apis.RegisterChatServiceServer(s, &chatServer{
-		messageCh: make(chan *apis.Message, 1024),
-	})
+	apis.RegisterChatServiceServer(s, &chatServer{})
 	go func() {
 		select {
 		case <-ctx.Done():

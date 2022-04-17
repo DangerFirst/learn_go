@@ -102,7 +102,7 @@ func (d dbChat) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHist
 		fmt.Printf("创建%s的聊天记录失败：%v\n", chy.Talker, err)
 		return nil, err
 	}
-	return chy, nil
+	return nil, nil
 }
 
 func (d dbChat) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
@@ -123,6 +123,24 @@ func (d dbChat) ChatRecord(ctx context.Context, account *apis.Account) (*apis.Ch
 	return nil, nil
 }
 
-func (d dbChat) RevMessage(ctx context.Context, account *apis.Account) (*apis.Message, error) {
-	panic("implement me")
+func (d dbChat) RevMessage(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
+	var tables []*apis.ChatHistory
+	resp := d.conn.Where("listener_account=? and is_read=0", account.Account).Find(&tables)
+	if err := resp.Error; err != nil {
+		fmt.Println("接收失败：", err)
+		return nil, err
+	}
+	if len(tables) == 0 {
+		fmt.Println("没有新消息")
+		return nil, nil
+	}
+	for _, v := range tables {
+		fmt.Printf("%s|%d:%s %s\n", v.Talker, v.TalkerAccount, v.Record, v.CreateDate)
+	}
+	resp = d.conn.Model(&tables).Where("listener_account=? and is_read=0", account.Account).Update("is_read", 1)
+	if err := resp.Error; err != nil {
+		fmt.Println("标记为已读失败", err)
+		return nil, err
+	}
+	return nil, nil
 }

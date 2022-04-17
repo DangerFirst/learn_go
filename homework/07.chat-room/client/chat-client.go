@@ -39,6 +39,8 @@ func main() {
 						chatWith(c, act)
 					} else if commandAfterLogin == "chat history" {
 						chatHistory(c, act)
+					} else if commandAfterLogin == "chat subscribe" {
+						revMessage(c, act)
 					} else if commandAfterLogin == "exit 0" {
 						fmt.Println("退出登录成功")
 						logOut(c, act)
@@ -78,6 +80,19 @@ func logOut(c apis.ChatServiceClient, act *apis.Account) {
 	}
 }
 
+func revMessage(c apis.ChatServiceClient, act *apis.Account) {
+	conn := connectDb()
+	var chatServer apis.ChatServiceServer = NewDbChat(conn, &dbChat{})
+	_, err := c.RevMessage(context.TODO(), act)
+	if err != nil {
+		log.Fatal("接收失败：", err)
+	}
+	_, err = chatServer.RevMessage(context.TODO(), act)
+	if err != nil {
+		fmt.Println("查询失败：", err)
+	}
+}
+
 func chatHistory(c apis.ChatServiceClient, act *apis.Account) {
 	conn := connectDb()
 	var chatServer apis.ChatServiceServer = NewDbChat(conn, &dbChat{})
@@ -90,7 +105,10 @@ func chatHistory(c apis.ChatServiceClient, act *apis.Account) {
 	fmt.Print("输入要查询的对象账号：")
 	fmt.Scanln(&toAct)
 	ctx = context.WithValue(ctx, "toAct", toAct)
-	chatServer.ChatRecord(ctx, act)
+	_, err = chatServer.ChatRecord(ctx, act)
+	if err != nil {
+		fmt.Println("查询失败：", err)
+	}
 }
 
 func chatWith(c apis.ChatServiceClient, act *apis.Account) {
@@ -99,17 +117,23 @@ func chatWith(c apis.ChatServiceClient, act *apis.Account) {
 	ctx := context.Background()
 	var toAct string
 	var text string
-	_, err := c.Chat(ctx, act)
-	if err != nil {
-		log.Fatal("发起失败：", err)
-	}
 	fmt.Print("输入要交流的对象账号：")
 	fmt.Scanln(&toAct)
 	fmt.Print("内容：")
 	fmt.Scanln(&text)
 	ctx = context.WithValue(ctx, "toAct", toAct)
 	ctx = context.WithValue(ctx, "text", text)
-	chatServer.Chat(ctx, act)
+	_, err := chatServer.Chat(ctx, act)
+	if err != nil {
+		log.Fatal("发起失败：", err)
+	}
+	ctx = context.WithValue(ctx, "mg", "111")
+	ret, err := c.Chat(ctx, act)
+	fmt.Println(ret)
+	if err != nil {
+		log.Fatal("发起失败：", err)
+	}
+
 }
 
 func onlineUser(c apis.ChatServiceClient) {

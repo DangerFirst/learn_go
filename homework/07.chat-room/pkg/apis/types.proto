@@ -8,21 +8,12 @@ service ChatService{
   rpc OnlineUser(null) returns(OnlineUserList){}
   rpc Chat(Account) returns(ChatHistory){}
   rpc ChatRecord(Account) returns(ChatHistory){}
-  rpc RevMessage(Account) returns(Message){}
+  rpc RevMessage(Account) returns(ChatHistory){}
   rpc LogOut(Account) returns (Account){}
-//  rpc WatchOnline(null) returns(stream OnlineUserList){}
 }
 
 message null{}
 
-message Message{
-  int64 talkerAccount = 1;
-  string talker = 2;
-  int64 listenerAccount =3;
-  string listener = 4;
-  string  record = 5;
-  string  createDate = 6;
-}
 
 message OnlineUserList{
   repeated OnlineUser onlineUsers = 1;
@@ -48,6 +39,8 @@ message ChatHistory{
   string  record = 6;
   // @gotags: gorm:"column:create_date"
   string  createDate = 7;
+  // @gotags: gorm:"column:is_read"
+  int64  isRead = 8;
 }
 
 message Account{

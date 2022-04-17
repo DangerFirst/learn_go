@@ -23,7 +23,7 @@ type ChatServiceClient interface {
 	OnlineUser(ctx context.Context, in *Null, opts ...grpc.CallOption) (*OnlineUserList, error)
 	Chat(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error)
 	ChatRecord(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error)
-	RevMessage(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Message, error)
+	RevMessage(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error)
 	LogOut(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Account, error)
 }
 
@@ -80,8 +80,8 @@ func (c *chatServiceClient) ChatRecord(ctx context.Context, in *Account, opts ..
 	return out, nil
 }
 
-func (c *chatServiceClient) RevMessage(ctx context.Context, in *Account, opts ...grpc.CallOption) (*Message, error) {
-	out := new(Message)
+func (c *chatServiceClient) RevMessage(ctx context.Context, in *Account, opts ...grpc.CallOption) (*ChatHistory, error) {
+	out := new(ChatHistory)
 	err := c.cc.Invoke(ctx, "/apis.ChatService/RevMessage", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,7 @@ type ChatServiceServer interface {
 	OnlineUser(context.Context, *Null) (*OnlineUserList, error)
 	Chat(context.Context, *Account) (*ChatHistory, error)
 	ChatRecord(context.Context, *Account) (*ChatHistory, error)
-	RevMessage(context.Context, *Account) (*Message, error)
+	RevMessage(context.Context, *Account) (*ChatHistory, error)
 	LogOut(context.Context, *Account) (*Account, error)
 }
 
@@ -130,7 +130,7 @@ func (UnimplementedChatServiceServer) Chat(context.Context, *Account) (*ChatHist
 func (UnimplementedChatServiceServer) ChatRecord(context.Context, *Account) (*ChatHistory, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChatRecord not implemented")
 }
-func (UnimplementedChatServiceServer) RevMessage(context.Context, *Account) (*Message, error) {
+func (UnimplementedChatServiceServer) RevMessage(context.Context, *Account) (*ChatHistory, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevMessage not implemented")
 }
 func (UnimplementedChatServiceServer) LogOut(context.Context, *Account) (*Account, error) {
