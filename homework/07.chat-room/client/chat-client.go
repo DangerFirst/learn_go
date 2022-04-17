@@ -81,29 +81,35 @@ func logOut(c apis.ChatServiceClient, act *apis.Account) {
 func chatHistory(c apis.ChatServiceClient, act *apis.Account) {
 	conn := connectDb()
 	var chatServer apis.ChatServiceServer = NewDbChat(conn, &dbChat{})
-	_, err := c.ChatRecord(context.TODO(), act)
+	ctx := context.Background()
+	var toAct string
+	_, err := c.ChatRecord(ctx, act)
 	if err != nil {
 		log.Fatal("查询失败：", err)
 	}
-	_, err = chatServer.ChatRecord(context.TODO(), act)
-	if err != nil {
-		log.Fatal("查询失败：", err)
-	}
+	fmt.Print("输入要查询的对象账号：")
+	fmt.Scanln(&toAct)
+	ctx = context.WithValue(ctx, "toAct", toAct)
+	chatServer.ChatRecord(ctx, act)
 }
 
 func chatWith(c apis.ChatServiceClient, act *apis.Account) {
-	//conn := connectDb()
-	//var chatServer apis.ChatServiceServer=NewDbChat(conn,&dbChat{})
-	//var toAct string
-	//chy := &apis.ChatHistory{}
-	//fmt.Print("输入要交流的对象账号：")
-	//fmt.Scanln(&toAct)
-	//fmt.Print("内容：")
-	//fmt.Scanln(&chy.Record)
-	//
-	//fmt.Printf("%s\n：",act.Name)
-	//chatServer.Chat(context.TODO(),act)
-
+	conn := connectDb()
+	var chatServer apis.ChatServiceServer = NewDbChat(conn, &dbChat{})
+	ctx := context.Background()
+	var toAct string
+	var text string
+	_, err := c.Chat(ctx, act)
+	if err != nil {
+		log.Fatal("发起失败：", err)
+	}
+	fmt.Print("输入要交流的对象账号：")
+	fmt.Scanln(&toAct)
+	fmt.Print("内容：")
+	fmt.Scanln(&text)
+	ctx = context.WithValue(ctx, "toAct", toAct)
+	ctx = context.WithValue(ctx, "text", text)
+	chatServer.Chat(ctx, act)
 }
 
 func onlineUser(c apis.ChatServiceClient) {

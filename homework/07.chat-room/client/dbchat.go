@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 var _ apis.ChatServiceServer = &dbChat{}
@@ -62,12 +63,52 @@ func (d dbChat) OnlineUser(ctx context.Context, null *apis.Null) (*apis.OnlineUs
 }
 
 func (d dbChat) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
-	return nil, nil
+	var tables []*apis.ChatHistory
+	toAct := ctx.Value("toAct")
+	text := fmt.Sprint(ctx.Value("text"))
+	resp := d.conn.Where("talker_account=? and listener_account=?", account.Account, toAct).Order("id desc").Limit(20).Find(&tables)
+	if err := resp.Error; err != nil {
+		fmt.Println("查询失败：", err)
+		return nil, err
+	}
+	fmt.Printf("%s:%s\n", account.Name, text)
+	fmt.Println("历史聊天记录：")
+	if len(tables) == 0 {
+		fmt.Println("没有聊天记录")
+	} else {
+		for _, v := range tables {
+			fmt.Printf("%s|%d:%s->%s|%d %s\n", v.Talker, v.TalkerAccount, v.Record, v.Listener, v.ListenerAccount, v.CreateDate)
+		}
+	}
+
+	var table *apis.Account
+	resp = d.conn.Where("account=?", toAct).Find(&table)
+	if err := resp.Error; err != nil {
+		fmt.Println("查询交流账户失败：", err)
+		return nil, err
+	}
+
+	chy := &apis.ChatHistory{
+		TalkerAccount:   account.Account,
+		Talker:          account.Name,
+		ListenerAccount: table.Account,
+		Listener:        table.Name,
+		Record:          text,
+		CreateDate:      time.Now().Local().String(),
+	}
+
+	resp = d.conn.Create(chy)
+	if err := resp.Error; err != nil {
+		fmt.Printf("创建%s的聊天记录失败：%v\n", chy.Talker, err)
+		return nil, err
+	}
+	return chy, nil
 }
 
 func (d dbChat) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
 	var tables []*apis.ChatHistory
-	resp := d.conn.Where("talker_account=?", account.Account).Find(&tables)
+	toAct := ctx.Value("toAct")
+	resp := d.conn.Where("talker_account=? and listener_account=?", account.Account, toAct).Order("id desc").Find(&tables)
 	if err := resp.Error; err != nil {
 		fmt.Println("查询失败：", err)
 		return nil, err
