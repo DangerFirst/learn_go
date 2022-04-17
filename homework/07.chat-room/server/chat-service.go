@@ -2,7 +2,10 @@ package main
 
 import (
 	"chatroom/pkg/apis"
+	"fmt"
 	"golang.org/x/net/context"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
 )
 
@@ -25,6 +28,11 @@ func (c chatServer) LogOut(ctx context.Context, account *apis.Account) (*apis.Ac
 
 func (c chatServer) Login(ctx context.Context, account *apis.Account) (*apis.Account, error) {
 	log.Printf("%s登录成功\n", account.Name)
+	for _, v := range ol.OnlineUsers {
+		if v.Account == account.Account {
+			return account, nil
+		}
+	}
 	ol.OnlineUsers = append(ol.OnlineUsers, &apis.OnlineUser{
 		Account: account.Account,
 		Name:    account.Name,
@@ -58,4 +66,22 @@ func (c chatServer) RevMessage(ctx context.Context, account *apis.Account) (*api
 	log.Printf("%s接收消息\n", account.Name)
 	chy := &apis.ChatHistory{}
 	return chy, nil
+}
+
+func dbCharHistory() {
+	conn, err := gorm.Open(mysql.Open("root:123qwe@tcp(localhost)/testdb"))
+	if err != nil {
+		log.Fatal("数据库连接失败：", err)
+	}
+	log.Println("连接数据库成功")
+	var tables []*apis.ChatHistory
+	resp := conn.Find(&tables)
+	if err := resp.Error; err != nil {
+		fmt.Println("查询聊天记录失败：", err)
+	}
+	records := NewRecord("E:/CharHistory.json")
+	if err := records.saveAccount(tables); err != nil {
+		log.Fatal("备份聊天记录失败：", err)
+	}
+	log.Println("备份聊天记录成功")
 }

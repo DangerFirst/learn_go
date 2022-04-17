@@ -6,11 +6,18 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.TODO())
 	defer cancel()
+	go func() {
+		for {
+			dbCharHistory()
+			time.Sleep(1 * time.Hour)
+		}
+	}()
 	startGRPCServer(ctx)
 }
 
