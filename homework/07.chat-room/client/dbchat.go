@@ -66,7 +66,7 @@ func (d dbChat) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHist
 	var tables []*apis.ChatHistory
 	toAct := ctx.Value("toAct")
 	text := fmt.Sprint(ctx.Value("text"))
-	resp := d.conn.Where("talker_account=? and listener_account=?", account.Account, toAct).Order("id desc").Limit(20).Find(&tables)
+	resp := d.conn.Where("(talker_account=? and listener_account=?) or (talker_account=? and listener_account=?)", account.Account, toAct, toAct, account.Account).Order("id desc").Limit(20).Find(&tables)
 	if err := resp.Error; err != nil {
 		fmt.Println("查询失败：", err)
 		return nil, err
@@ -108,7 +108,7 @@ func (d dbChat) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHist
 func (d dbChat) ChatRecord(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
 	var tables []*apis.ChatHistory
 	toAct := ctx.Value("toAct")
-	resp := d.conn.Where("talker_account=? and listener_account=?", account.Account, toAct).Order("id desc").Find(&tables)
+	resp := d.conn.Where("(talker_account=? and listener_account=?) or (talker_account=? and listener_account=?)", account.Account, toAct, toAct, account.Account).Find(&tables)
 	if err := resp.Error; err != nil {
 		fmt.Println("查询失败：", err)
 		return nil, err
