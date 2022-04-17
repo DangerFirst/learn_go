@@ -168,9 +168,14 @@ func onlineUser(c apis.ChatServiceClient) {
 	if err != nil {
 		log.Fatal("查询失败：", err)
 	}
+	fmt.Print("输入页数：")
+	var page int
+	fmt.Scanln(&page)
 	fmt.Println("在线用户：")
-	for _, v := range ret.OnlineUsers {
-		fmt.Printf("账号：%d 昵称：%s\n", v.Account, v.Name)
+	for i, v := range ret.OnlineUsers {
+		if i%20 < page && i%20 >= page-1 {
+			fmt.Printf("账号：%d 昵称：%s\n", v.Account, v.Name)
+		}
 	}
 }
 
