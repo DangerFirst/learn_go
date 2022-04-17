@@ -18,8 +18,8 @@ type record struct {
 	filePath string
 }
 
-func (r *record) saveAccount(pi *apis.Account) error {
-	data, err := json.Marshal(pi)
+func (r *record) saveAccount(act *apis.Account) error {
+	data, err := json.Marshal(act)
 	if err != nil {
 		fmt.Println("marshal出错：", err)
 		return err
