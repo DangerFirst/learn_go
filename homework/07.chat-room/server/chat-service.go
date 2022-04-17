@@ -2,7 +2,6 @@ package main
 
 import (
 	"chatroom/pkg/apis"
-	"fmt"
 	"golang.org/x/net/context"
 	"log"
 )
@@ -45,8 +44,6 @@ func (c chatServer) OnlineUser(ctx context.Context, null *apis.Null) (*apis.Onli
 
 func (c chatServer) Chat(ctx context.Context, account *apis.Account) (*apis.ChatHistory, error) {
 	log.Printf("%s开始聊天\n", account.Name)
-	//mg=append(mg, ctx.Value("mg").(*apis.Message))
-	fmt.Println(fmt.Sprintln(ctx.Value("mg")))
 	mx := &apis.ChatHistory{}
 	return mx, nil
 }
